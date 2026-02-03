@@ -18,10 +18,10 @@ public enum BpmMessageEnum {
     TASK_TIMEOUT("bpm_task_timeout"); // 任务审批超时时，发送给审批人
 
     /**
-     * 短信模板的标识
+     * 邮件模板的标识
      *
-     * 关联 SmsTemplateDO 的 code 属性
+     * 关联 MailTemplateDO 的 code 属性
      */
-    private final String smsTemplateCode;
+    private final String mailTemplateCode;
 
 }
