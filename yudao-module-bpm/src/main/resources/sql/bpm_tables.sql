@@ -172,7 +172,32 @@ CREATE TABLE `bpm_oa_leave` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='OA 请假申请表';
 
 -- -------------------------------------------
--- 8. BPM 流程抄送表
+-- 8. 质检审核流程业务表
+-- 对应实体: BpmQualityReviewDO
+-- -------------------------------------------
+DROP TABLE IF EXISTS `bpm_quality_review`;
+CREATE TABLE `bpm_quality_review` (
+    `id`                          BIGINT          NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `user_id`                     BIGINT          NOT NULL COMMENT '发起人用户编号',
+    `task_id`                     VARCHAR(128)    NOT NULL COMMENT '任务 ID（业务变量）',
+    `initiator_username`          VARCHAR(64)     NOT NULL DEFAULT '' COMMENT '发起人用户名',
+    `initiator_dept_head_emails`  TEXT            COMMENT '部门负责人邮箱列表（JSON 数组）',
+    `initiator_dept_head_user_ids` TEXT           COMMENT '部门负责人用户 ID 列表（JSON 数组，可选）',
+    `initiator_dept_head_usernames` TEXT          COMMENT '部门负责人用户名列表（JSON 数组，可选）',
+    `status`                      TINYINT         NOT NULL DEFAULT 0 COMMENT '审批结果（1-处理中，2-审批通过，3-审批不通过，4-已取消）',
+    `process_instance_id`         VARCHAR(64)     DEFAULT '' COMMENT '对应的流程编号',
+    `creator`                     VARCHAR(64)     DEFAULT '' COMMENT '创建者',
+    `create_time`                 DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updater`                     VARCHAR(64)     DEFAULT '' COMMENT '更新者',
+    `update_time`                 DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `deleted`                     BIT(1)          NOT NULL DEFAULT b'0' COMMENT '是否删除',
+    PRIMARY KEY (`id`),
+    INDEX `idx_user_id` (`user_id`),
+    INDEX `idx_process_instance_id` (`process_instance_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='质检审核流程业务表';
+
+-- -------------------------------------------
+-- 9. BPM 流程抄送表
 -- 对应实体: BpmProcessInstanceCopyDO
 -- -------------------------------------------
 DROP TABLE IF EXISTS `bpm_process_instance_copy`;
